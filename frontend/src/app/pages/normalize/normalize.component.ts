@@ -128,7 +128,6 @@ export class NormalizeComponent {
 
   onChangeTableName(value: { table: Table; newName: string }): void {
     let command = new TableRenameCommand(value.table, value.newName);
-
     this.commandProcessor.do(command);
     this.schemaChanged.next();
   }

@@ -73,12 +73,23 @@ export class NormalizeSideBarComponent implements OnInit, OnChanges {
   }
 
   setTableName() {
-    this.renameTable.emit({
-      table: this.table,
-      newName: this.tableName,
-    });
-    this.editingName = false;
+    if (this.isUnqiueTablename()) {
+      this.renameTable.emit({
+        table: this.table,
+        newName: this.tableName,
+      });
+      this.editingName = false;
+    }
   }
+
+  isUnqiueTablename() {
+    return (
+      [...this.schema.tables].filter(
+        (table) => table.name.toLowerCase() == this.tableName.toLowerCase()
+      ).length == 0
+    );
+  }
+
   changePage(evt: SbbPageEvent) {
     this.page = evt.pageIndex;
   }
