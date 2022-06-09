@@ -17,29 +17,25 @@ export default class Table {
   public schemaName = '';
   public columns: ColumnCombination;
   public pk?: ColumnCombination = undefined;
-  public fds: Array<FunctionalDependency> = [];
-  public relationships = new Array<Relationship>();
   public sources = new Array<SourceTableInstance>();
+  public relationships = new Array<Relationship>();
+
+  public fds: Array<FunctionalDependency> = [];
   private _violatingFds?: Array<FunctionalDependency>;
   private _keys?: Array<ColumnCombination>;
   private _fdClusters?: Array<FdCluster>;
-
-  /**
-   * cached results of schema.fksOf(this). Should not be accessed from outside the schema class
-   */
+  /** cached results of schema.fksOf(this). Should not be accessed from outside the schema class */
   public _fks!: Array<TableRelationship>;
-  /**
-   * cached results of schema.fksOf(this). Should not be accessed from outside the schema class
-   */
+  /** cached results of schema.fksOf(this). Should not be accessed from outside the schema class */
   public _references!: Array<TableRelationship>;
-  /**
-   * cached results of schema.indsOf(this). Should not be accessed from outside the schema class
-   */
+  /** cached results of schema.indsOf(this). Should not be accessed from outside the schema class */
   public _inds!: Map<SourceRelationship, Array<TableRelationship>>;
-  /**
-   * This variable tracks if the cached inds are still valid
-   */
+  /** This variable tracks if the cached inds are still valid */
   public _indsValid = false;
+
+  public constructor(columns?: ColumnCombination) {
+    this.columns = columns || new ColumnCombination();
+  }
 
   public toJSON() {
     return {
@@ -47,13 +43,9 @@ export default class Table {
       schemaName: this.schemaName,
       columns: this.columns,
       pk: this.pk,
-      relationships: this.relationships,
       sources: this.sources,
+      relationships: this.relationships,
     };
-  }
-
-  public constructor(columns?: ColumnCombination) {
-    this.columns = columns || new ColumnCombination();
   }
 
   public static fromITable(iTable: ITable): Table {
